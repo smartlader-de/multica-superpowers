@@ -39,6 +39,14 @@ if (!manifest.superpowers_source.ref) {
 
 const slugs = new Set();
 const skills = new Set();
+const allAgentSlugs = new Set((manifest.agents ?? []).map((agent) => agent.slug).filter(Boolean));
+const humanReviewerSlug = manifest.human_reviewer.placeholder.replace(/^@/, "");
+
+function extractMentions(rendered) {
+  return [...rendered.matchAll(/@([a-z0-9-]+)/g)]
+    .map((match) => match[1])
+    .filter((mention) => mention !== humanReviewerSlug);
+}
 
 for (const agent of manifest.agents ?? []) {
   if (!agent.slug || !agent.skill) {
@@ -75,11 +83,30 @@ for (const agent of manifest.agents ?? []) {
       fail(`${agent.slug} instructions do not reference expected skill ${agent.skill}`);
     }
 
-    if ((agent.gates ?? []).length > 0 && agent.next) {
-      const executableNextMention = `@${agent.next}`;
-      const backtickedNextMention = `\`@${agent.next}\``;
-      if (rendered.includes(executableNextMention) || rendered.includes(backtickedNextMention)) {
-        fail(`${agent.slug} gate instructions should not auto-mention @${agent.next}`);
+    const mentions = extractMentions(rendered);
+    const manifestAgentMentions = mentions.filter((mention) => allAgentSlugs.has(mention));
+
+    if ((agent.gates ?? []).length > 0) {
+      if (!rendered.includes(manifest.human_reviewer.placeholder)) {
+        fail(`${agent.slug} gate instructions do not mention ${manifest.human_reviewer.placeholder}`);
+      }
+
+      for (const mention of manifestAgentMentions) {
+        fail(`${agent.slug} gate instructions should not mention agent @${mention}`);
+      }
+    } else if (agent.next) {
+      if (!rendered.includes(`@${agent.next}`)) {
+        fail(`${agent.slug} instructions do not mention expected next agent @${agent.next}`);
+      }
+
+      for (const mention of manifestAgentMentions) {
+        if (mention !== agent.next) {
+          fail(`${agent.slug} instructions mention unexpected agent @${mention}`);
+        }
+      }
+    } else {
+      for (const mention of manifestAgentMentions) {
+        fail(`${agent.slug} instructions should not mention agent @${mention}`);
       }
     }
   }
