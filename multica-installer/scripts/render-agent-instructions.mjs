@@ -14,18 +14,29 @@ const template = fs.readFileSync(templatePath, "utf8");
 fs.mkdirSync(outputDir, { recursive: true });
 
 function render(templateText, replacements) {
-  return templateText.replace(/\{\{([a-z_]+)\}\}/g, (match, key) => {
+  const rendered = templateText.replace(/\{\{([^}]+)\}\}/g, (match, rawKey) => {
+    const key = rawKey.trim();
     if (!(key in replacements)) {
       throw new Error(`Missing template replacement: ${key}`);
     }
 
     return replacements[key];
   });
+
+  if (rendered.includes("{{") || rendered.includes("}}")) {
+    throw new Error("Rendered template contains unreplaced placeholder delimiters.");
+  }
+
+  return rendered;
 }
 
 for (const agent of manifest.agents) {
   const firstGateName = agent.gates[0] ?? null;
   const gate = firstGateName ? manifest.human_gates[firstGateName] : null;
+  if (firstGateName && !gate) {
+    throw new Error(`Unknown human gate "${firstGateName}" for agent "${agent.slug}".`);
+  }
+
   const next = agent.next ?? "human-reviewer";
   const completionRule = gate
     ? `- When this phase reaches its human gate, set or request status \`${gate.status}\`, mention \`${manifest.human_reviewer.placeholder}\`, and stop without mentioning the next agent.`

@@ -4,7 +4,7 @@ When human approval is required, post:
 {{gate_message}}
 
 Reviewer: {{human_reviewer}}
-Next agent after approval: @{{next}}
+Next agent after approval: {{next}}
 ```
 
 Then stop. The human must resume by mentioning the next agent.
