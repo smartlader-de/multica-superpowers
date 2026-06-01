@@ -28,16 +28,17 @@ The installer itself is separate from those working agents.
 
 1. Add this repository as a skill in Multica.
 2. Create a Multica agent for the `multica-superpowers` skill.
-3. Create a Multica issue assigned to that agent with a prompt like:
+3. Assign the `multica-superpowers` skill to that agent.
+4. Create a Multica issue assigned to that agent with a prompt like:
 
    ```text
    Set this project up with Superpowers.
    ```
 
-4. The installer agent imports the upstream Superpowers skills, creates the
+5. The installer agent imports the upstream Superpowers skills, creates the
    working agents, attaches the matching skills, and applies the Multica handoff
    instructions.
-5. Review the setup summary the installer posts on the issue.
+6. Review the setup summary the installer posts on the issue.
 
 ## Repository Layout
 
