@@ -6,6 +6,18 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
 const manifest = JSON.parse(fs.readFileSync(path.join(root, "manifest.json"), "utf8"));
 
+function renderNext(agent) {
+  if (!agent.next) {
+    return "human completion decision";
+  }
+
+  if (agent.gates.length > 0) {
+    return `human gate (${agent.gates.join(", ")}); human resumes by mentioning ${agent.next}`;
+  }
+
+  return `@${agent.next}`;
+}
+
 console.log("# Multica Superpowers dry run");
 console.log("");
 console.log(`Upstream: ${manifest.superpowers_source.repo}@${manifest.superpowers_source.ref}`);
@@ -21,7 +33,7 @@ for (const agent of manifest.agents) {
   console.log(`- Create/update agent: ${agent.slug}`);
   console.log(`- Attach skill: ${agent.skill}`);
   console.log(`- Apply instructions: multica-installer/agents/${agent.slug}.md`);
-  console.log(`- Next: ${agent.next ? `@${agent.next}` : "human completion decision"}`);
+  console.log(`- Next: ${renderNext(agent)}`);
   console.log(`- Gates: ${agent.gates.length > 0 ? agent.gates.join(", ") : "none"}`);
   console.log("");
 }
