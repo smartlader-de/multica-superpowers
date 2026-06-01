@@ -31,12 +31,14 @@ function render(templateText, replacements) {
 }
 
 for (const agent of manifest.agents) {
-  const firstGateName = agent.gates[0] ?? null;
-  const gate = firstGateName ? manifest.human_gates[firstGateName] : null;
-  if (firstGateName && !gate) {
-    throw new Error(`Unknown human gate "${firstGateName}" for agent "${agent.slug}".`);
+  for (const gateName of agent.gates) {
+    if (!(gateName in manifest.human_gates)) {
+      throw new Error(`Unknown human gate "${gateName}" for agent "${agent.slug}".`);
+    }
   }
 
+  const firstGateName = agent.gates[0] ?? null;
+  const gate = firstGateName ? manifest.human_gates[firstGateName] : null;
   const next = agent.next ?? "human-reviewer";
   const completionRule = gate
     ? `- When this phase reaches its human gate, set or request status \`${gate.status}\`, mention \`${manifest.human_reviewer.placeholder}\`, and stop without mentioning the next agent.`
