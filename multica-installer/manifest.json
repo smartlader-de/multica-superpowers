@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "installer": {
+    "name": "multica-superpowers",
+    "runtime_policy": "use-installer-runtime-and-model",
+    "managed_by_label": "multica-superpowers-installer"
+  },
+  "superpowers_source": {
+    "type": "github",
+    "repo": "obra/superpowers",
+    "ref": "v5.1.0",
+    "skills_path": "skills"
+  },
+  "human_reviewer": {
+    "mode": "ask-during-setup",
+    "placeholder": "@human-reviewer"
+  },
+  "agents": [
+    {
+      "slug": "using-superpowers",
+      "skill": "using-superpowers",
+      "description": "Bootstrap agent that enforces Superpowers skill discovery and routing.",
+      "next": "brainstorming",
+      "gates": []
+    },
+    {
+      "slug": "brainstorming",
+      "skill": "brainstorming",
+      "description": "Turns rough ideas into approved design specs before implementation.",
+      "next": "writing-plans",
+      "gates": ["spec-review"]
+    },
+    {
+      "slug": "using-git-worktrees",
+      "skill": "using-git-worktrees",
+      "description": "Ensures isolated development workspace before implementation work.",
+      "next": "executing-plans",
+      "gates": []
+    },
+    {
+      "slug": "writing-plans",
+      "skill": "writing-plans",
+      "description": "Writes bite-sized implementation plans from approved specs.",
+      "next": "using-git-worktrees",
+      "gates": ["plan-review"]
+    },
+    {
+      "slug": "executing-plans",
+      "skill": "executing-plans",
+      "description": "Executes written implementation plans with checkpoints.",
+      "next": "requesting-code-review",
+      "gates": []
+    },
+    {
+      "slug": "subagent-driven-development",
+      "skill": "subagent-driven-development",
+      "description": "Executes implementation plans with fresh subagents and review loops.",
+      "next": "requesting-code-review",
+      "gates": []
+    },
+    {
+      "slug": "dispatching-parallel-agents",
+      "skill": "dispatching-parallel-agents",
+      "description": "Coordinates independent parallel agent tasks.",
+      "next": "requesting-code-review",
+      "gates": []
+    },
+    {
+      "slug": "test-driven-development",
+      "skill": "test-driven-development",
+      "description": "Enforces red-green-refactor implementation.",
+      "next": "verification-before-completion",
+      "gates": []
+    },
+    {
+      "slug": "systematic-debugging",
+      "skill": "systematic-debugging",
+      "description": "Finds root cause before attempting fixes.",
+      "next": "test-driven-development",
+      "gates": []
+    },
+    {
+      "slug": "requesting-code-review",
+      "skill": "requesting-code-review",
+      "description": "Requests focused code review before completion or merge.",
+      "next": "verification-before-completion",
+      "gates": []
+    },
+    {
+      "slug": "receiving-code-review",
+      "skill": "receiving-code-review",
+      "description": "Evaluates and responds to review feedback rigorously.",
+      "next": "verification-before-completion",
+      "gates": []
+    },
+    {
+      "slug": "verification-before-completion",
+      "skill": "verification-before-completion",
+      "description": "Requires evidence before claiming work is complete.",
+      "next": "finishing-a-development-branch",
+      "gates": []
+    },
+    {
+      "slug": "finishing-a-development-branch",
+      "skill": "finishing-a-development-branch",
+      "description": "Guides final merge, PR, keep, or cleanup decisions.",
+      "next": null,
+      "gates": ["completion-decision"]
+    },
+    {
+      "slug": "writing-skills",
+      "skill": "writing-skills",
+      "description": "Creates or edits skills with evaluation discipline.",
+      "next": "requesting-code-review",
+      "gates": []
+    }
+  ],
+  "human_gates": {
+    "spec-review": {
+      "status": "in_review",
+      "message": "Spec is ready for review. Please review the artifact, then approve by mentioning @writing-plans."
+    },
+    "plan-review": {
+      "status": "in_review",
+      "message": "Implementation plan is ready for review. Please review it, then approve by mentioning @using-git-worktrees."
+    },
+    "completion-decision": {
+      "status": "in_review",
+      "message": "Implementation is complete. Please choose merge, PR, keep branch, or cleanup."
+    },
+    "blocked": {
+      "status": "blocked",
+      "message": "Work is blocked and needs human input before another agent is invoked."
+    }
+  }
+}
