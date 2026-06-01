@@ -23,6 +23,7 @@ console.log("");
 console.log(`Upstream: ${manifest.superpowers_source.repo}@${manifest.superpowers_source.ref}`);
 console.log(`Skills path: ${manifest.superpowers_source.skills_path}`);
 console.log(`Runtime policy: ${manifest.installer.runtime_policy}`);
+console.log(`Generated agent max concurrent tasks: ${manifest.installer.agent_defaults.max_concurrent_tasks}`);
 console.log(`Human reviewer: ${manifest.human_reviewer.placeholder} (ask during setup)`);
 console.log("");
 
@@ -31,6 +32,7 @@ for (const agent of manifest.agents) {
   console.log(`## ${agent.slug}`);
   console.log(`- Import skill: ${source}`);
   console.log(`- Create/update agent: ${agent.slug}`);
+  console.log(`- Max concurrent tasks: ${manifest.installer.agent_defaults.max_concurrent_tasks}`);
   console.log(`- Attach skill: ${agent.skill}`);
   console.log(`- Apply instructions: multica-installer/agents/${agent.slug}.md`);
   console.log(`- Next: ${renderNext(agent)}`);

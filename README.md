@@ -100,12 +100,16 @@ A successful workspace setup should show:
 - 14 generated agents with matching names
 - each generated agent has exactly one matching skill attached
 - generated agents use the installer runtime/model for V1
+- generated agents have `max_concurrent_tasks` set to `1` for sequential V1 work
 - human gates mention a real workspace member
+- generated instructions contain clean Multica mention links, with no nested
+  `mention://` markdown and no raw `@human-reviewer`
 
 Useful inspection commands:
 
 ```bash
 multica --profile <profile> workspace list
+multica --profile <profile> --workspace-id <workspace-id> workspace member list --output json
 multica --profile <profile> --workspace-id <workspace-id> skill list --output json
 multica --profile <profile> --workspace-id <workspace-id> agent list --output json
 multica --profile <profile> --workspace-id <workspace-id> issue list --limit 50 --output json

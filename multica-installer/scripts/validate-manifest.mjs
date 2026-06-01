@@ -46,6 +46,10 @@ if (manifest.superpowers_source.skills_path !== "skills") {
   fail("superpowers_source.skills_path must be skills");
 }
 
+if (manifest.installer.agent_defaults?.max_concurrent_tasks !== 1) {
+  fail("installer.agent_defaults.max_concurrent_tasks must be 1 for sequential V1 execution");
+}
+
 const slugs = new Set((manifest.agents ?? []).map((agent) => agent.slug).filter(Boolean));
 const seenSlugs = new Set();
 const skills = new Set();

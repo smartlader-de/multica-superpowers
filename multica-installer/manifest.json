@@ -3,7 +3,10 @@
   "installer": {
     "name": "multica-superpowers",
     "runtime_policy": "use-installer-runtime-and-model",
-    "managed_by_label": "multica-superpowers-installer"
+    "managed_by_label": "multica-superpowers-installer",
+    "agent_defaults": {
+      "max_concurrent_tasks": 1
+    }
   },
   "superpowers_source": {
     "type": "github",

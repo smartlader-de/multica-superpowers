@@ -27,11 +27,37 @@ When asked to set up the workspace:
    ```
 
 7. Import or create the workspace skills listed in the manifest from the pinned upstream Superpowers source.
-8. Create or update the agents listed in the manifest.
+8. Create or update the agents listed in the manifest, using the manifest agent defaults. In V1, set `max_concurrent_tasks` to `1` so Multica does not parallelize issue work unless the human explicitly changes that later.
 9. Attach each imported skill to its matching agent.
 10. Apply the rendered wrapper instructions from `multica-installer/agents/`.
 11. Post a setup summary with all created or updated skills and agents.
 12. If setup completed successfully, mark the setup issue `done`.
+
+## Multica CLI Notes
+
+The local Multica CLI commands known to work for this installer are:
+
+```bash
+multica user profile get --output json
+multica workspace get --output json
+multica workspace member list --output json
+multica skill import --url <github-skill-url> --output json
+multica agent create --name <name> --runtime-id <runtime-id> --model <model> --max-concurrent-tasks 1 --instructions <instructions> --output json
+multica agent update <agent-id> --runtime-id <runtime-id> --model <model> --max-concurrent-tasks 1 --instructions <instructions> --output json
+multica agent skills set <agent-id> --skill-ids <skill-id> --output json
+multica issue status <issue-id> done
+```
+
+Use `multica user profile get --output json`; `multica user profile --output json` is not a valid command.
+
+## Mention Link Handling
+
+Multica may store rich mentions as markdown links such as `[@agent](mention://agent/<id>)`. Handle those links in two phases:
+
+1. Render wrapper instructions with safe placeholders from this repo first.
+2. After all agents exist and the human reviewer is known, replace only the literal placeholders or raw agent names with final Multica mention links.
+3. Do not run global replacement over text that already contains `mention://` links.
+4. Verify the final agent instructions have no nested mention markdown, no raw `@human-reviewer`, and the expected next-agent or human-review links are present.
 
 ## Rules
 
@@ -41,6 +67,7 @@ When asked to set up the workspace:
 - If an existing object has unclear ownership, stop and ask the human before replacing it.
 - At human gates, mention the configured human reviewer and stop. Do not mention the next agent until the human approves.
 - On blockers, set or request `blocked` status, explain the blocker, mention the human reviewer, and stop.
+- Keep generated agents sequential by default with `max_concurrent_tasks=1`; child issues are checkpoints unless the human explicitly approves parallel work.
 - Do not mark the setup issue `done` until skill import, agent creation or update, skill attachment, wrapper instruction application, and setup summary posting have all succeeded.
 
 ## Validation
