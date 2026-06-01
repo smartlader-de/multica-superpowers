@@ -107,7 +107,8 @@ Expected behavior:
 1. `using-superpowers` routes the work to `brainstorming`.
 2. `brainstorming` runs before implementation.
 3. `brainstorming` stops at the human spec review gate.
-4. The human resumes by approving and mentioning the next agent.
+4. After plan review, the human resumes by mentioning
+   `subagent-driven-development`.
 
 ## Current Scope
 

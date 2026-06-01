@@ -34,14 +34,14 @@
       "slug": "using-git-worktrees",
       "skill": "using-git-worktrees",
       "description": "Ensures isolated development workspace before implementation work.",
-      "next": "executing-plans",
+      "next": "subagent-driven-development",
       "gates": []
     },
     {
       "slug": "writing-plans",
       "skill": "writing-plans",
       "description": "Writes bite-sized implementation plans from approved specs.",
-      "next": "using-git-worktrees",
+      "next": "subagent-driven-development",
       "gates": ["plan-review"]
     },
     {
@@ -122,7 +122,7 @@
     },
     "plan-review": {
       "status": "in_review",
-      "message": "Implementation plan is ready for review. Please review it, then approve by mentioning the using-git-worktrees agent."
+      "message": "Implementation plan is ready for review. Please review it, then approve by mentioning the subagent-driven-development agent."
     },
     "completion-decision": {
       "status": "in_review",

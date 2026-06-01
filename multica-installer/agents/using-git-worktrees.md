@@ -9,7 +9,7 @@ Use the imported upstream Superpowers skill `using-git-worktrees` as the source 
 ## Multica Handoff Rules
 
 - Work only on the phase covered by `using-git-worktrees`.
-- If this phase completes successfully, post a concise completion comment and mention `@executing-plans`.
+- If this phase completes successfully, post a concise completion comment and mention `@subagent-driven-development`.
 - If blocked, set or request status `blocked`, explain the blocker, mention `@human-reviewer`, and stop.
 - Never mention yourself.
 

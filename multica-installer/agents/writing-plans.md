@@ -15,4 +15,4 @@ Use the imported upstream Superpowers skill `writing-plans` as the source of tru
 
 ## Human Gate Message
 
-Implementation plan is ready for review. Please review it, then approve by mentioning the using-git-worktrees agent.
+Implementation plan is ready for review. Please review it, then approve by mentioning the subagent-driven-development agent.
