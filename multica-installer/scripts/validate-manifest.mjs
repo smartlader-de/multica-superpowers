@@ -37,15 +37,13 @@ if (!manifest.superpowers_source.ref) {
   fail("superpowers_source.ref must be pinned");
 }
 
-const slugs = new Set();
+const slugs = new Set((manifest.agents ?? []).map((agent) => agent.slug).filter(Boolean));
+const seenSlugs = new Set();
 const skills = new Set();
-const allAgentSlugs = new Set((manifest.agents ?? []).map((agent) => agent.slug).filter(Boolean));
 const humanReviewerSlug = manifest.human_reviewer.placeholder.replace(/^@/, "");
 
 function extractMentions(rendered) {
-  return [...rendered.matchAll(/@([a-z0-9-]+)/g)]
-    .map((match) => match[1])
-    .filter((mention) => mention !== humanReviewerSlug);
+  return [...rendered.matchAll(/@([a-z0-9-]+)/g)].map((match) => match[1]);
 }
 
 for (const agent of manifest.agents ?? []) {
@@ -54,10 +52,10 @@ for (const agent of manifest.agents ?? []) {
     continue;
   }
 
-  if (slugs.has(agent.slug)) {
+  if (seenSlugs.has(agent.slug)) {
     fail(`duplicate agent slug: ${agent.slug}`);
   }
-  slugs.add(agent.slug);
+  seenSlugs.add(agent.slug);
 
   if (skills.has(agent.skill)) {
     fail(`duplicate skill mapping: ${agent.skill}`);
@@ -84,10 +82,16 @@ for (const agent of manifest.agents ?? []) {
     }
 
     const mentions = extractMentions(rendered);
-    const manifestAgentMentions = mentions.filter((mention) => allAgentSlugs.has(mention));
+    const manifestAgentMentions = mentions.filter((mention) => slugs.has(mention));
+
+    for (const mention of mentions) {
+      if (mention !== humanReviewerSlug && !slugs.has(mention)) {
+        fail(`${agent.slug} instructions mention unknown @${mention}`);
+      }
+    }
 
     if ((agent.gates ?? []).length > 0) {
-      if (!rendered.includes(manifest.human_reviewer.placeholder)) {
+      if (!mentions.includes(humanReviewerSlug)) {
         fail(`${agent.slug} gate instructions do not mention ${manifest.human_reviewer.placeholder}`);
       }
 
@@ -95,7 +99,7 @@ for (const agent of manifest.agents ?? []) {
         fail(`${agent.slug} gate instructions should not mention agent @${mention}`);
       }
     } else if (agent.next) {
-      if (!rendered.includes(`@${agent.next}`)) {
+      if (!mentions.includes(agent.next)) {
         fail(`${agent.slug} instructions do not mention expected next agent @${agent.next}`);
       }
 
