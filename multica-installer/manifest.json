@@ -118,11 +118,11 @@
   "human_gates": {
     "spec-review": {
       "status": "in_review",
-      "message": "Spec is ready for review. Please review the artifact, then approve by mentioning @writing-plans."
+      "message": "Spec is ready for review. Please review the artifact, then approve by mentioning the writing-plans agent."
     },
     "plan-review": {
       "status": "in_review",
-      "message": "Implementation plan is ready for review. Please review it, then approve by mentioning @using-git-worktrees."
+      "message": "Implementation plan is ready for review. Please review it, then approve by mentioning the using-git-worktrees agent."
     },
     "completion-decision": {
       "status": "in_review",
