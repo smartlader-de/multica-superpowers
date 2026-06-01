@@ -38,7 +38,9 @@ The installer itself is separate from those working agents.
 5. The installer agent imports the upstream Superpowers skills, creates the
    working agents, attaches the matching skills, and applies the Multica handoff
    instructions.
-6. Review the setup summary the installer posts on the issue.
+6. The installer posts a setup summary and marks the setup issue `done` when
+   setup succeeds.
+7. Review the setup summary the installer posts on the issue.
 
 ## Repository Layout
 

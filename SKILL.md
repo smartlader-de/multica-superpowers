@@ -31,6 +31,7 @@ When asked to set up the workspace:
 9. Attach each imported skill to its matching agent.
 10. Apply the rendered wrapper instructions from `multica-installer/agents/`.
 11. Post a setup summary with all created or updated skills and agents.
+12. If setup completed successfully, mark the setup issue `done`.
 
 ## Rules
 
@@ -40,6 +41,7 @@ When asked to set up the workspace:
 - If an existing object has unclear ownership, stop and ask the human before replacing it.
 - At human gates, mention the configured human reviewer and stop. Do not mention the next agent until the human approves.
 - On blockers, set or request `blocked` status, explain the blocker, mention the human reviewer, and stop.
+- Do not mark the setup issue `done` until skill import, agent creation or update, skill attachment, wrapper instruction application, and setup summary posting have all succeeded.
 
 ## Validation
 
