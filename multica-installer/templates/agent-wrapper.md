@@ -12,6 +12,7 @@ Use the imported upstream Superpowers skill `{{skill}}` as the source of truth f
 {{completion_rule}}
 - If blocked, set or request status `blocked`, explain the blocker, mention `{{human_reviewer}}`, and stop.
 - Never mention yourself.
+{{multica_rules}}
 
 ## Human Gate Message
 

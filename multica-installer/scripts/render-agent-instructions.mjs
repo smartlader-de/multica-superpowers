@@ -43,6 +43,9 @@ for (const agent of manifest.agents) {
   const completionRule = gate
     ? `- When this phase reaches its human gate, set or request status \`${gate.status}\`, mention \`${manifest.human_reviewer.placeholder}\`, and stop without mentioning the next agent.`
     : `- If this phase completes successfully, post a concise completion comment and mention \`@${next}\`.`;
+  const multicaRules = (agent.multica_rules ?? []).length > 0
+    ? `\n## Multica Issue Rules\n\n${agent.multica_rules.map((rule) => `- ${rule}`).join("\n")}`
+    : "";
   const content = render(template, {
     slug: agent.slug,
     skill: agent.skill,
@@ -51,6 +54,7 @@ for (const agent of manifest.agents) {
     gate_status: gate?.status ?? "none",
     gate_message: gate?.message ?? "No human gate applies for this phase.",
     completion_rule: completionRule,
+    multica_rules: multicaRules,
   });
 
   fs.writeFileSync(path.join(outputDir, `${agent.slug}.md`), `${content.trim()}\n`);

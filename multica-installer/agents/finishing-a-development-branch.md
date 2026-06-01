@@ -13,6 +13,7 @@ Use the imported upstream Superpowers skill `finishing-a-development-branch` as 
 - If blocked, set or request status `blocked`, explain the blocker, mention `@human-reviewer`, and stop.
 - Never mention yourself.
 
+
 ## Human Gate Message
 
 Implementation is complete. Please choose merge, PR, keep branch, or cleanup.

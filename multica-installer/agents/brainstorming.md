@@ -13,6 +13,7 @@ Use the imported upstream Superpowers skill `brainstorming` as the source of tru
 - If blocked, set or request status `blocked`, explain the blocker, mention `@human-reviewer`, and stop.
 - Never mention yourself.
 
+
 ## Human Gate Message
 
 Spec is ready for review. Please review the artifact, then approve by mentioning the writing-plans agent.

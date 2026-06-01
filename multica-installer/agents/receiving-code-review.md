@@ -13,6 +13,7 @@ Use the imported upstream Superpowers skill `receiving-code-review` as the sourc
 - If blocked, set or request status `blocked`, explain the blocker, mention `@human-reviewer`, and stop.
 - Never mention yourself.
 
+
 ## Human Gate Message
 
 No human gate applies for this phase.

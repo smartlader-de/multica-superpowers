@@ -110,6 +110,21 @@ Expected behavior:
 4. After plan review, the human resumes by mentioning
    `subagent-driven-development`.
 
+## Child Issue Strategy
+
+Multica supports child issues with `multica issue create --parent <issue-id>`.
+The installer uses that capability conservatively:
+
+- `writing-plans` creates the plan artifact first.
+- `writing-plans` may recommend 3-6 coarse child issues if the plan naturally
+  splits into independently trackable chunks.
+- `writing-plans` does not create child issues before human plan review.
+- `subagent-driven-development` executes the approved plan internally by default.
+- `subagent-driven-development` creates child issues only if the approved plan or
+  human explicitly asks for coarse tracking boundaries.
+- Tiny TDD/checklist steps stay inside the plan; they should not become Multica
+  child issues.
+
 ## Current Scope
 
 V1 uses one runtime/model for every generated agent: the same runtime/model used
