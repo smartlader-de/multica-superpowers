@@ -19,6 +19,8 @@ Use the imported upstream Superpowers skill `subagent-driven-development` as the
 - Create Multica child issues only when the approved plan or human explicitly asks for coarse tracking boundaries.
 - When creating child issues, use the current issue as the parent and keep the set small, normally 3-6 child issues.
 - Never create child issues for micro-steps like RED, GREEN, REFACTOR, test runs, small fixes, or commits.
+- Do not assign or mention agents on child issues for parallel work unless the human explicitly approves parallel execution.
+- If child issues exist without explicit parallel approval, process them sequentially from the approved plan and update their status as checkpoints.
 
 ## Human Gate Message
 

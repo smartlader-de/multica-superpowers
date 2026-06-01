@@ -122,6 +122,9 @@ The installer uses that capability conservatively:
 - `subagent-driven-development` executes the approved plan internally by default.
 - `subagent-driven-development` creates child issues only if the approved plan or
   human explicitly asks for coarse tracking boundaries.
+- Child issues are checkpoints by default. They should not be assigned to agents
+  or used for parallel execution unless the human explicitly approves parallel
+  work.
 - Tiny TDD/checklist steps stay inside the plan; they should not become Multica
   child issues.
 
