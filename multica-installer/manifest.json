@@ -20,13 +20,6 @@
   },
   "agents": [
     {
-      "slug": "using-superpowers",
-      "skill": "using-superpowers",
-      "description": "Bootstrap agent that enforces Superpowers skill discovery and routing.",
-      "next": "brainstorming",
-      "gates": []
-    },
-    {
       "slug": "brainstorming",
       "skill": "brainstorming",
       "description": "Turns rough ideas into approved design specs before implementation.",
@@ -68,12 +61,12 @@
       "next": "requesting-code-review",
       "gates": [],
       "multica_rules": [
-        "Execute the approved plan internally by default; do not turn every plan checklist item into a Multica issue.",
-        "Create Multica child issues only when the approved plan or human explicitly asks for coarse tracking boundaries.",
-        "When creating child issues, use the current issue as the parent and keep the set small, normally 3-6 child issues.",
-        "Never create child issues for micro-steps like RED, GREEN, REFACTOR, test runs, small fixes, or commits.",
-        "Do not assign or mention agents on child issues for parallel work unless the human explicitly approves parallel execution.",
-        "If child issues exist without explicit parallel approval, process them sequentially from the approved plan and update their status as checkpoints."
+        "Implement the approved plan yourself using internal subagents — that is this phase's job. Internal subagents are ephemeral and are not Multica agents or issues; they need no mention, handoff, or child issue.",
+        "Your phase ends when the plan is implemented and your internal review loop is satisfied. Do not perform the code-review, verification, or branch-finishing phases yourself — each is a separate Multica agent reached by handoff.",
+        "Your internal subagent review is not a substitute for the requesting-code-review phase. At phase end, always hand off to the requesting-code-review agent; never self-approve, mark the issue complete, or skip straight to finishing.",
+        "Do not turn plan checklist items into Multica issues; never create child issues for micro-steps like RED, GREEN, REFACTOR, test runs, small fixes, or commits.",
+        "Create Multica child issues only when the approved plan or human explicitly asks for coarse tracking boundaries, using the current issue as the parent and keeping the set small (3-6).",
+        "Do not assign or mention agents on child issues for parallel work unless the human explicitly approves parallel execution; otherwise process them sequentially from the approved plan as checkpoints."
       ]
     },
     {
@@ -81,7 +74,13 @@
       "skill": "dispatching-parallel-agents",
       "description": "Coordinates independent parallel agent tasks.",
       "next": "requesting-code-review",
-      "gates": []
+      "gates": [],
+      "multica_rules": [
+        "Dispatch the independent tasks using internal parallel subagents — that is this phase's job. Internal subagents are ephemeral and are not Multica agents or issues; they need no mention, handoff, or child issue.",
+        "Your phase ends when the dispatched work is complete and consolidated. Do not perform the code-review, verification, or branch-finishing phases yourself — each is a separate Multica agent reached by handoff.",
+        "At phase end, always hand off to the requesting-code-review agent; never self-approve, mark the issue complete, or skip straight to finishing.",
+        "Only create Multica child issues or mention other Multica agents for parallel work when the human explicitly approves parallel execution; otherwise keep parallelism internal to this phase."
+      ]
     },
     {
       "slug": "test-driven-development",

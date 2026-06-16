@@ -40,21 +40,21 @@ for (const agent of manifest.agents) {
   const firstGateName = agent.gates[0] ?? null;
   const gate = firstGateName ? manifest.human_gates[firstGateName] : null;
   const next = agent.next ?? "human-reviewer";
+  const reviewer = manifest.human_reviewer.placeholder;
   const completionRule = gate
-    ? `- When this phase reaches its human gate, set or request status \`${gate.status}\`, mention \`${manifest.human_reviewer.placeholder}\`, and stop without mentioning the next agent.`
-    : `- If this phase completes successfully, post a concise completion comment and mention \`@${next}\`.`;
+    ? `- At the \`${agent.skill}\` human gate, set or request status \`${gate.status}\` and mention ${reviewer} as a \`member\` mention — the status change surfaces the gate; the member mention renders a link but does not auto-run anyone. Stop without mentioning the next agent; the human resumes by mentioning the next agent.`
+    : `- When the \`${agent.skill}\` phase completes, post a concise completion comment and hand off to \`@${next}\` with an \`agent\` mention link built per \`multica-mentioning\` — an agent mention enqueues that agent's run; a bare name does nothing.`;
   const multicaRules = (agent.multica_rules ?? []).length > 0
-    ? `\n## Multica Issue Rules\n\n${agent.multica_rules.map((rule) => `- ${rule}`).join("\n")}`
+    ? `\n\n## Multica Issue Rules\n\n${agent.multica_rules.map((rule) => `- ${rule}`).join("\n")}`
     : "";
+  const gateBlock = gate ? `\n\n## Human gate\n\n${gate.message}` : "";
   const content = render(template, {
     slug: agent.slug,
     skill: agent.skill,
-    next,
-    human_reviewer: manifest.human_reviewer.placeholder,
-    gate_status: gate?.status ?? "none",
-    gate_message: gate?.message ?? "No human gate applies for this phase.",
+    human_reviewer: reviewer,
     completion_rule: completionRule,
     multica_rules: multicaRules,
+    gate_block: gateBlock,
   });
 
   fs.writeFileSync(path.join(outputDir, `${agent.slug}.md`), `${content.trim()}\n`);

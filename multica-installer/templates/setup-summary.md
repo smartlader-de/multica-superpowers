@@ -8,4 +8,4 @@ Created or updated agents:
 
 {{agents}}
 
-Start normal work by mentioning `@using-superpowers` or by assigning a new issue to that agent.
+Start normal work by assigning a new issue to the `brainstorming` agent (the workflow entry point).

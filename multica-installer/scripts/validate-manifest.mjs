@@ -9,7 +9,6 @@ const agentsDir = path.join(root, "agents");
 const templatesDir = path.join(root, "templates");
 
 const expectedSkills = [
-  "using-superpowers",
   "brainstorming",
   "using-git-worktrees",
   "writing-plans",
