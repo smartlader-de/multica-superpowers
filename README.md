@@ -79,8 +79,8 @@ node multica-installer/scripts/render-dry-run.mjs
 Expected:
 
 ```text
-Rendered 14 agent instruction files.
-Manifest valid: 14 agents mapped to 14 skills.
+Rendered 13 agent instruction files.
+Manifest valid: 13 agents mapped to 13 skills.
 ```
 
 To confirm the import bundle stays small:
@@ -96,11 +96,13 @@ Expected: fewer than 128 tracked files.
 A successful workspace setup should show:
 
 - `multica-superpowers` installer skill present
-- 14 Superpowers skills imported from `obra/superpowers@v5.1.0`
-- 14 generated agents with matching names
+- 13 Superpowers skills imported from `obra/superpowers@v5.1.0`
+- 13 generated agents with matching names
 - each generated agent has exactly one matching skill attached
 - generated agents use the installer runtime/model for V1
 - generated agents have `max_concurrent_tasks` set to `1` for sequential V1 work
+- generated instructions point agents at the built-in Multica skills
+  (`multica-mentioning`, `multica-working-on-issues`) for collaboration mechanics
 - human gates mention a real workspace member
 - generated instructions contain clean Multica mention links, with no nested
   `mention://` markdown and no raw `@human-reviewer`
@@ -118,7 +120,7 @@ multica --profile <profile> --workspace-id <workspace-id> issue list --limit 50 
 ## Acceptance Test
 
 Provisioning is not the same as workflow acceptance. After setup, create a fresh
-issue assigned to `using-superpowers` with:
+issue assigned to `brainstorming` with:
 
 ```text
 Let's make a react todo list
@@ -126,10 +128,9 @@ Let's make a react todo list
 
 Expected behavior:
 
-1. `using-superpowers` routes the work to `brainstorming`.
-2. `brainstorming` runs before implementation.
-3. `brainstorming` stops at the human spec review gate.
-4. After plan review, the human resumes by mentioning
+1. `brainstorming` runs before any implementation.
+2. `brainstorming` stops at the human spec review gate.
+3. After plan review, the human resumes by mentioning
    `subagent-driven-development`.
 
 ## Child Issue Strategy

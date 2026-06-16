@@ -59,6 +59,18 @@ Multica may store rich mentions as markdown links such as `[@agent](mention://ag
 3. Do not run global replacement over text that already contains `mention://` links.
 4. Verify the final agent instructions have no nested mention markdown, no raw `@human-reviewer`, and the expected next-agent or human-review links are present.
 
+The mention `type` must match the entity, or the link resolves to nothing:
+
+- Next-agent handoffs use `mention://agent/<agent-id>` (looked up with `multica agent list --output json`). An `agent` mention enqueues that agent's run.
+- The human reviewer is a workspace member, so it must use `mention://member/<user-id>` (looked up with `multica workspace member list --output json`; use `user_id`, not the membership-row id). A `member` mention renders a link but enqueues no run — the status change to `in_review` is what surfaces the gate. Do not give the human reviewer an `agent`-type link.
+
+## Built-in Multica Skills
+
+The generated agent instructions defer collaboration mechanics to Multica's built-in skills rather than re-explaining them. Confirm these built-in skills are available in the workspace; the agents reference them by name:
+
+- `multica-mentioning` — the verified mention-link contract (link shape, UUID lookup, which mention types enqueue a run).
+- `multica-working-on-issues` — issue status side effects, PR linking vs close intent, sub-issue enqueue behavior, and metadata keys.
+
 ## Rules
 
 - Do not modify upstream Superpowers skill content.
