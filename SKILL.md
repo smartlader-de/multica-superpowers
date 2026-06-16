@@ -13,21 +13,35 @@ This is an installer and repair skill. It does not replace upstream Superpowers 
 
 ## Setup Workflow
 
-When asked to set up the workspace:
+**Preferred path — use `install.mjs` (avoids all known shell-level failures):**
+
+```bash
+# 1. Discover workspace state; writes multica-installer/install-plan.json
+MULTICA_ISSUE_ID=<issue-id> node multica-installer/scripts/install.mjs --plan
+
+# 2. Review install-plan.json; resolve any ambiguous[] entries manually
+
+# 3. Execute deterministically from the plan
+node multica-installer/scripts/install.mjs --apply
+```
+
+The script handles skill import, agent create/update, skill attachment, mention finalization, self-verification, summary posting, and issue completion in a single idempotent pass.
+
+**Manual fallback** (if `install.mjs` cannot run — e.g. Node not available):
 
 1. Confirm you are running in a Multica workspace task.
-2. Confirm the Multica CLI or API is available.
+2. Confirm the Multica CLI is available.
 3. Load `multica-installer/manifest.json`.
 4. Determine the runtime and model used by this installer. In V1, generated agents use the same runtime and model.
 5. Ask for the human reviewer mention if it is not already known.
-6. Run or explain the dry run:
+6. Run the dry run to preview actions:
 
    ```bash
    node multica-installer/scripts/render-dry-run.mjs
    ```
 
 7. Import or create the workspace skills listed in the manifest from the pinned upstream Superpowers source.
-8. Create or update the agents listed in the manifest, using the manifest agent defaults. In V1, set `max_concurrent_tasks` to `1` so Multica does not parallelize issue work unless the human explicitly changes that later.
+8. Create or update the agents listed in the manifest, using the manifest agent defaults. In V1, set `max_concurrent_tasks` to `1`.
 9. Attach each imported skill to its matching agent.
 10. Apply the rendered wrapper instructions from `multica-installer/agents/`.
 11. Post a setup summary with all created or updated skills and agents.
@@ -82,6 +96,14 @@ The generated agent instructions defer collaboration mechanics to Multica's buil
 - Keep generated agents sequential by default with `max_concurrent_tasks=1`; child issues are checkpoints unless the human explicitly approves parallel work.
 - Do not mark the setup issue `done` until skill import, agent creation or update, skill attachment, wrapper instruction application, and setup summary posting have all succeeded.
 
+## Environment Constraints
+
+Known gotchas from production installer runs — these cause silent failures or tool denials:
+
+- **No `&` backgrounding in foreground terminals.** The Multica agent runs in a foreground task context. Do not background CLI commands with `&`; run them synchronously.
+- **There is NO `--instructions-file` flag.** Pass agent instructions via `--instructions <value>` where the value is a single real argv element. Never use a heredoc or shell variable expansion for this; those are shell constructs that break when executed as an argv array.
+- **The `write_file` tool may be denied.** The installer agent may not have `write_file` permission for files outside the task context. Prefer `install.mjs` (writes via Node `fs.writeFileSync`) or write via a temp file and read it back with `cat`.
+
 ## Validation
 
 Before claiming setup files are ready, run:
@@ -90,4 +112,5 @@ Before claiming setup files are ready, run:
 node multica-installer/scripts/render-agent-instructions.mjs
 node multica-installer/scripts/validate-manifest.mjs
 node multica-installer/scripts/render-dry-run.mjs
+node multica-installer/scripts/install.mjs --plan   # writes install-plan.json; review before --apply
 ```

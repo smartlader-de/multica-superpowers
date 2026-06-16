@@ -17,8 +17,8 @@ exceeding the import bundle file limit.
 After importing `multica-superpowers` into a Multica workspace and asking it to
 set up the workspace, the installer should create:
 
-- 14 workspace skills imported from `obra/superpowers@v5.1.0`
-- 14 matching Multica agents, one per Superpowers skill
+- 13 workspace skills imported from `obra/superpowers@v5.1.0`
+- 13 matching Multica agents, one per Superpowers skill
 - Wrapper instructions for Multica `@agent` handoffs
 - Human review gates for spec review, plan review, blockers, and completion
 
@@ -35,9 +35,9 @@ The installer itself is separate from those working agents.
    Set this project up with Superpowers.
    ```
 
-5. The installer agent imports the upstream Superpowers skills, creates the
-   working agents, attaches the matching skills, and applies the Multica handoff
-   instructions.
+5. The installer agent runs `install.mjs --plan` to discover workspace state
+   and write `install-plan.json`, then `install.mjs --apply` to import skills,
+   create agents, attach skills, finalize mention links, and verify the result.
 6. The installer posts a setup summary and marks the setup issue `done` when
    setup succeeds.
 7. Review the setup summary the installer posts on the issue.
@@ -57,6 +57,7 @@ multica-installer/
 - `multica-installer/manifest.json` pins the upstream source and agent mapping.
 - `multica-installer/agents/*.md` are generated Multica wrapper instructions.
 - `multica-installer/templates/*.md` are the wrapper templates.
+- `multica-installer/scripts/install.mjs` is the plan-then-execute installer.
 - `multica-installer/scripts/*.mjs` render, validate, and preview setup.
 
 ## What Is Not Here
@@ -81,6 +82,14 @@ Expected:
 ```text
 Rendered 13 agent instruction files.
 Manifest valid: 13 agents mapped to 13 skills.
+```
+
+To preview what the installer will do against a live workspace:
+
+```bash
+MULTICA_ISSUE_ID=<issue-id> node multica-installer/scripts/install.mjs --plan
+# review multica-installer/install-plan.json, then:
+node multica-installer/scripts/install.mjs --apply
 ```
 
 To confirm the import bundle stays small:
